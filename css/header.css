@@ -1,0 +1,70 @@
+header {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  min-width: var(--width-minimum);
+  height: 66px;
+}
+header > .status-bar {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+}
+header .time {
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+header .status-group {
+  display: flex;
+  justify-content: center;
+  margin-right: 10px;
+}
+header > .status-bar > .status-group > .item {
+  scale: 0.9;
+}
+header > .status-bar > .status-group > .item.battery {
+  rotate: 90deg;
+}
+header > .menu-bar {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0px;
+}
+header .location-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+header .location-group:hover {
+  cursor: pointer;
+}
+header .location-text {
+  font-weight: 700;
+  font-size: 1.3em;
+  height: 24px;
+}
+header .down-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header .menu-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+header > .menu-bar > .menu-group > .item {
+  margin: 0px 3px;
+  scale: 1.2;
+  padding: 2px;
+}
+header > .menu-bar > .menu-group > .item:hover {
+  cursor: pointer;
+}
