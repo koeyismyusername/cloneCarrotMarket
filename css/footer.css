@@ -4,6 +4,7 @@ footer {
   bottom: 0;
   width: 100vw;
   min-width: var(--width-minimum);
+  height: 90px;
 }
 footer > .menu-bar {
   display: flex;
