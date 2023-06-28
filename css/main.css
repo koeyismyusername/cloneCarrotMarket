@@ -1,5 +1,5 @@
 main {
-  padding-top: 66px;
+  padding: 66px 0px 90px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,14 +17,14 @@ main > .wrapper > .content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0px;
+  margin: 20px 0px;
 }
 main > .wrapper > .content > .image {
   width: 120px;
   height: 120px;
   object-fit: cover;
   border-radius: 10px;
-  margin: 0px 10px;
+  margin: 0px 10px 0px 20px;
 }
 main > .wrapper > .content > .image:hover,
 main > .wrapper > .content > .text-group > .title:hover {
@@ -33,7 +33,7 @@ main > .wrapper > .content > .text-group > .title:hover {
 main > .wrapper > .content > .text-group {
   flex-basis: 210px;
   flex-grow: 1;
-  margin-right: 10px;
+  margin-right: 20px;
   height: 120px;
   display: flex;
   flex-direction: column;
