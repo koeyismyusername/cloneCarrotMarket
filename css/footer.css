@@ -28,7 +28,7 @@ footer > .menu-bar > .item:hover > .icon {
 footer > .menu-bar > .item > .icon {
   scale: 1.5;
   margin: 10px;
-  transition: transform 0.6s ease-out;
+  transition: transform 0.3s ease-out;
 }
 footer > .menu-bar > .item > .text {
   font-size: 0.8em;
