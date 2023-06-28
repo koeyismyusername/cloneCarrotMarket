@@ -3,6 +3,8 @@
 /* 구글 아이콘 */
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons+Outlined");
+/* 구글 폰트 */
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap");
 /* css */
 @import url("./css/root.css");
 @import url("./css/header.css");
