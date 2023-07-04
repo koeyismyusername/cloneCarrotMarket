@@ -11,6 +11,7 @@ async function handleSubmitForm(event) {
     body: body,
   });
   const data = await res.json();
-  if (data === "200") window.location.pathname = "/";
-  else console.log("글쓰기에 실패했습니다.");
+  if (data === "200") {
+    window.location.pathname = "/";
+  } else console.log("글쓰기에 실패했습니다.");
 }

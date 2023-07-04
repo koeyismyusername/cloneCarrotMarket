@@ -38,11 +38,11 @@ async def createItem(
   return "200"
 
 @app.get("/items")
-def readItems():
+async def readItems():
   CON.row_factory = sqlite3.Row
   cursor = CON.cursor()
   rows = cursor.execute("""SELECT * FROM items
-                        ORDER BY insertAt ASC""").fetchall()  
+                        ORDER BY insertAt DESC""").fetchall()  
   cursor.close()
   return JSONResponse(jsonable_encoder(dict(row) for row in rows))
 
