@@ -4,5 +4,6 @@ CREATE TABLE items (
 	price INTEGER NOT NULL,
 	place TEXT NOT NULL,
 	title TEXT NOT NULL,
-	description TEXT
+	description TEXT,
+	insertAt INTEGER NOT NULL
 );

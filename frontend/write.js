@@ -6,8 +6,11 @@ async function handleSubmitForm(event) {
   const body = new FormData(form);
   body.append("insertAt", new Date().getTime());
 
-  await fetch("/items", {
+  const res = await fetch("/items", {
     method: "POST",
     body: body,
   });
+  const data = await res.json();
+  if (data === "200") window.location.pathname = "/";
+  else console.log("글쓰기에 실패했습니다.");
 }
