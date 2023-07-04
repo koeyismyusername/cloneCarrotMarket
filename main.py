@@ -1,11 +1,13 @@
-from fastapi import FastAPI, Form, UploadFile
+from fastapi import FastAPI, Form, UploadFile, Response
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 from typing import Annotated
 import sqlite3
+from fastapi.encoders import jsonable_encoder
 
 app = FastAPI()
 
-CON = sqlite3.connect("database.db")
+CON = sqlite3.connect("database.db", check_same_thread=False)
 cur = CON.cursor()
 cur.execute("""CREATE TABLE IF NOT EXISTS items (
   id INTEGER PRIMARY KEY NOT NULL,
@@ -27,12 +29,30 @@ async def createItem(
               description: Annotated[str, Form()], 
               insertAt: Annotated[int, Form()]):
   cursor = CON.cursor()
-  IMG_BINARY = await image.read()
+  IMG_BYTES = await image.read()
   
   cursor.execute(f"""INSERT INTO items (image, price, place, title, description, insertAt)
-                  VALUES ('{IMG_BINARY.hex()}', {price}, '{place}', '{title}', '{description}', {insertAt})""")
+                  VALUES ('{IMG_BYTES.hex()}', {price}, '{place}', '{title}', '{description}', {insertAt})""")
   cursor.close()
   CON.commit()
   return "200"
+
+@app.get("/items")
+def readItems():
+  CON.row_factory = sqlite3.Row
+  cursor = CON.cursor()
+  rows = cursor.execute("""SELECT * FROM items
+                        ORDER BY insertAt ASC""").fetchall()  
+  cursor.close()
+  return JSONResponse(jsonable_encoder(dict(row) for row in rows))
+
+@app.get("/images/{item_id}")
+def readImage(item_id):
+  cursor = CON.cursor()
+  cursor.execute(f"""SELECT image FROM items
+                  WHERE id={item_id}""")
+  IMAGE_HEX = cursor.fetchone()[0]
+  cursor.close()
+  return Response(content=bytes.fromhex(IMAGE_HEX))
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
