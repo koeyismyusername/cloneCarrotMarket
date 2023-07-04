@@ -20,6 +20,14 @@ cur.execute("""CREATE TABLE IF NOT EXISTS items (
   )""")
 cur.close()
 
+@app.post("/signup")
+def signup(id: Annotated[str, Form()],
+          password: Annotated[str, Form()],
+          name: Annotated[str, Form()],
+          email: Annotated[str, Form()]):
+  print(id, password, name, email)
+  return "200"
+
 @app.post("/items")
 async def createItem(
               image: UploadFile, 
