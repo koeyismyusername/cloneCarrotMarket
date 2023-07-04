@@ -18,7 +18,7 @@ function renderItemList(items) {
     const imgURL = URL.createObjectURL(imgBlob);
     content.innerHTML = `<img
     class="image"
-    src=${imgURL}
+    src="${imgURL}"
     alt="이미지를 불러올 수 없습니다"
   />
   <div class="text-group">

@@ -49,10 +49,9 @@ def readItems():
 @app.get("/images/{item_id}")
 def readImage(item_id):
   cursor = CON.cursor()
-  cursor.execute(f"""SELECT image FROM items
-                  WHERE id={item_id}""")
-  IMAGE_HEX = cursor.fetchone()[0]
+  IMAGE_HEX = cursor.execute(f"""SELECT image FROM items
+                  WHERE id={int(item_id)}""").fetchone()[0]
   cursor.close()
-  return Response(content=bytes.fromhex(IMAGE_HEX))
+  return Response(content=bytes.fromhex(IMAGE_HEX), media_type="image/*")
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
