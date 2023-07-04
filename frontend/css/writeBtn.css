@@ -10,6 +10,8 @@
   position: fixed;
   right: 20px;
   bottom: 120px;
+  display: flex;
+  align-items: center;
 }
 
 #btn-write:hover {

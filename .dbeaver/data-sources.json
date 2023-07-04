@@ -1,0 +1,32 @@
+{
+	"folders": {},
+	"connections": {
+		"sqlite_jdbc-1891ef950bb-4fde83844e237e2": {
+			"provider": "sqlite",
+			"driver": "sqlite_jdbc",
+			"name": "database.db",
+			"save-password": true,
+			"configuration": {
+				"database": "C:\\Users\\koey2\\WebProjects\\cloneCarrotMarket\\database.db",
+				"url": "jdbc:sqlite:C:\\Users\\koey2\\WebProjects\\cloneCarrotMarket\\database.db",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800
+		}
+	}
+}

@@ -1,0 +1,9 @@
+CREATE TABLE items (
+	id INTEGER PRIMARY KEY NOT NULL,
+	image BLOB,
+	price INTEGER NOT NULL,
+	place TEXT NOT NULL,
+	title TEXT NOT NULL,
+	description TEXT,
+	insertAt INTEGER NOT NULL
+);
