@@ -38,7 +38,7 @@ async def createItem(
   return "200"
 
 @app.get("/items")
-async def readItems():
+def readItems():
   CON.row_factory = sqlite3.Row
   cursor = CON.cursor()
   rows = cursor.execute("""SELECT * FROM items

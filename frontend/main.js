@@ -10,11 +10,12 @@ async function fetchItemList() {
 
 function renderItemList(items) {
   items.forEach(async (item) => {
+    const content = document.createElement("div");
+    wrapper.appendChild(content);
+    content.classList.add("content");
     const res = await fetch(`/images/${item.id}`);
     const imgBlob = await res.blob();
     const imgURL = URL.createObjectURL(imgBlob);
-    const content = document.createElement("div");
-    content.classList.add("content");
     content.innerHTML = `<img
     class="image"
     src=${imgURL}
@@ -29,7 +30,6 @@ function renderItemList(items) {
     </div>
     <div class="price">${item.price.toLocaleString("ko-KR")}원</div>
   </div>`;
-    wrapper.appendChild(content);
   });
 }
 
