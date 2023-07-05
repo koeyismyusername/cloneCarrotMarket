@@ -4,10 +4,16 @@ from fastapi.responses import JSONResponse
 from typing import Annotated
 import sqlite3
 from fastapi.encoders import jsonable_encoder
+from fastapi_login import LoginManager
+from fastapi_login.exceptions import InvalidCredentialsException
 
 app = FastAPI()
 
+SECERET = "koeyismyusername"
+MANAGER = LoginManager(SECERET, "/login")
+
 CON = sqlite3.connect("database.db", check_same_thread=False)
+CON.row_factory = sqlite3.Row
 cur = CON.cursor()
 cur.execute("""CREATE TABLE IF NOT EXISTS items (
   id INTEGER PRIMARY KEY NOT NULL,
@@ -18,14 +24,57 @@ cur.execute("""CREATE TABLE IF NOT EXISTS items (
   description TEXT,
   insertAt INTEGER NOT NULL
   )""")
+cur.execute("""CREATE TABLE IF NOT EXISTS users (
+  id TEXT PRIMARY KEY NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  password TEXT NOT NULL
+  )""")
 cur.close()
 
+@MANAGER.user_loader()
+def queryUser(id):
+  cur = CON.cursor()
+  result = cur.execute(f"""SELECT * FROM users
+                      WHERE id='{id}'""").fetchone()
+  cur.close()
+  return result
+
+@app.post("/login")
+def login(id: Annotated[str, Form()],
+          password: Annotated[str, Form()]):
+  user = queryUser(id)
+  if not user:
+    raise InvalidCredentialsException
+  elif password != user["password"]:
+    raise InvalidCredentialsException
+  
+  access_token = MANAGER.create_access_token(data= {
+    "id": user["id"],
+    "name": user["name"],
+    "email": user["email"],
+  })
+  
+  return access_token
+  
 @app.post("/signup")
 def signup(id: Annotated[str, Form()],
           password: Annotated[str, Form()],
           name: Annotated[str, Form()],
           email: Annotated[str, Form()]):
-  print(id, password, name, email)
+  cur = CON.cursor()
+  existingId = cur.execute(f"""SELECT id FROM users
+                      WHERE id='{id}'""").fetchone()
+  
+  if existingId:
+    print("이미 해당 아이디가 존재합니다.")
+    cur.close()
+    return "401"
+  
+  cur.execute(f"""INSERT INTO users (id, name, email, password)
+            VALUES ('{id}', '{name}', '{email}', '{password}')""")
+  CON.commit()
+  cur.close()
   return "200"
 
 @app.post("/items")
