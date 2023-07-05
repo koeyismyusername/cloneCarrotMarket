@@ -3,21 +3,27 @@ const wrapper = document.querySelector("main > .wrapper");
 fetchItemList();
 
 async function fetchItemList() {
-  const res = await fetch("/items");
+  const res = await fetch("/items", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${window.localStorage.getItem("access token")}`,
+    },
+  });
   const items = await res.json();
   renderItemList(items);
 }
 
 function renderItemList(items) {
   items.forEach(async (item) => {
+    const content = document.createElement("div");
+    wrapper.appendChild(content);
+    content.classList.add("content");
     const res = await fetch(`/images/${item.id}`);
     const imgBlob = await res.blob();
     const imgURL = URL.createObjectURL(imgBlob);
-    const content = document.createElement("div");
-    content.classList.add("content");
     content.innerHTML = `<img
     class="image"
-    src=${imgURL}
+    src="${imgURL}"
     alt="이미지를 불러올 수 없습니다"
   />
   <div class="text-group">
@@ -29,7 +35,6 @@ function renderItemList(items) {
     </div>
     <div class="price">${item.price.toLocaleString("ko-KR")}원</div>
   </div>`;
-    wrapper.appendChild(content);
   });
 }
 
