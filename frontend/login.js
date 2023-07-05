@@ -15,9 +15,11 @@ async function handleSubmitLoginForm(event) {
     method: "POST",
     body: body,
   });
+  const data = await res.json();
 
   if (res.status === 200) {
     warnning.textContent = null;
+    window.localStorage.setItem("access token", `${data.access_token}`);
     window.location.pathname = "/";
   } else if (res.tatus === 401) {
     warnning.textContent = "아이디 혹은 비밀번호가 옳지 않습니다.";

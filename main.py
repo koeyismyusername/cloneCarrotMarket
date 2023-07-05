@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form, UploadFile, Response
+from fastapi import FastAPI, Form, UploadFile, Response, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from typing import Annotated
@@ -33,29 +33,38 @@ cur.execute("""CREATE TABLE IF NOT EXISTS users (
 cur.close()
 
 @MANAGER.user_loader()
-def queryUser(id):
+def queryUser(token):
+  print("token is here =>", token)
   cur = CON.cursor()
-  result = cur.execute(f"""SELECT * FROM users
-                      WHERE id='{id}'""").fetchone()
+  user = cur.execute(f"""SELECT * FROM users
+                      WHERE id='{token["id"]}'""").fetchone()
   cur.close()
-  return result
+  print("queryUser: user is here =>", user)
+  return user
 
 @app.post("/login")
 def login(id: Annotated[str, Form()],
           password: Annotated[str, Form()]):
-  user = queryUser(id)
+  cur = CON.cursor()
+  print("hello id is here =>", id)
+  user = cur.execute(f"""SELECT * FROM users
+                    WHERE id='{id}'""").fetchone()
+  print("login: user is here =>", user)
   if not user:
     raise InvalidCredentialsException
   elif password != user["password"]:
     raise InvalidCredentialsException
   
   access_token = MANAGER.create_access_token(data= {
-    "id": user["id"],
-    "name": user["name"],
-    "email": user["email"],
+    "sub": {
+      "id": user["id"],
+      "name": user["name"],
+      "email": user["email"],
+    }
   })
   
-  return access_token
+  cur.close()
+  return {"access_token": access_token}
   
 @app.post("/signup")
 def signup(id: Annotated[str, Form()],
@@ -84,7 +93,8 @@ async def createItem(
               place: Annotated[str, Form()], 
               title: Annotated[str, Form()], 
               description: Annotated[str, Form()], 
-              insertAt: Annotated[int, Form()]):
+              insertAt: Annotated[int, Form()],
+              user = Depends(MANAGER)):
   cursor = CON.cursor()
   IMG_BYTES = await image.read()
   
@@ -95,7 +105,8 @@ async def createItem(
   return "200"
 
 @app.get("/items")
-def readItems():
+def readItems(user = Depends(MANAGER)):
+  print("readItems: user is here =>", user)
   CON.row_factory = sqlite3.Row
   cursor = CON.cursor()
   rows = cursor.execute("""SELECT * FROM items

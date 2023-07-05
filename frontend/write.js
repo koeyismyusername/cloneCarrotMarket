@@ -8,6 +8,9 @@ async function handleSubmitForm(event) {
 
   const res = await fetch("/items", {
     method: "POST",
+    headers: {
+      Authorization: `Bearer ${window.localStorage.getItem("access token")}`,
+    },
     body: body,
   });
   const data = await res.json();

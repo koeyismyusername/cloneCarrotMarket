@@ -3,7 +3,12 @@ const wrapper = document.querySelector("main > .wrapper");
 fetchItemList();
 
 async function fetchItemList() {
-  const res = await fetch("/items");
+  const res = await fetch("/items", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${window.localStorage.getItem("access token")}`,
+    },
+  });
   const items = await res.json();
   renderItemList(items);
 }
